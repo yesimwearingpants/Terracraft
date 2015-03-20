@@ -220,9 +220,9 @@ public final class GL31 {
 	 * Draw multiple instances of a range of elements.
 	 *
 	 * @param mode      the kind of primitives to render. One of:<br>{@link GL11#GL_POINTS POINTS}, {@link GL11#GL_LINE_STRIP LINE_STRIP}, {@link GL11#GL_LINE_LOOP LINE_LOOP}, {@link GL11#GL_LINES LINES}, {@link GL11#GL_POLYGON POLYGON}, {@link GL11#GL_TRIANGLE_STRIP TRIANGLE_STRIP}, {@link GL11#GL_TRIANGLE_FAN TRIANGLE_FAN}, {@link GL11#GL_TRIANGLES TRIANGLES}, {@link GL11#GL_QUAD_STRIP QUAD_STRIP}, {@link GL11#GL_QUADS QUADS}, {@link GL32#GL_LINES_ADJACENCY LINES_ADJACENCY}, {@link GL32#GL_LINE_STRIP_ADJACENCY LINE_STRIP_ADJACENCY}, {@link GL32#GL_TRIANGLES_ADJACENCY TRIANGLES_ADJACENCY}, {@link GL32#GL_TRIANGLE_STRIP_ADJACENCY TRIANGLE_STRIP_ADJACENCY}, {@link GL40#GL_PATCHES PATCHES}
-	 * @param first     the starting index in the enabled arrays
-	 * @param count     the number of indices to be rendered
-	 * @param primcount the number of instances of the specified range of indices to be rendered
+	 * @param first     the index of the first vertex to be rendered
+	 * @param count     the number of vertices to be rendered
+	 * @param primcount the number of instances of the specified range of vertices to be rendered
 	 */
 	public static void glDrawArraysInstanced(int mode, int first, int count, int primcount) {
 		long __functionAddress = getInstance().DrawArraysInstanced;
@@ -254,7 +254,7 @@ public final class GL31 {
 	 * @param mode      the kind of primitives to render. One of:<br>{@link GL11#GL_POINTS POINTS}, {@link GL11#GL_LINE_STRIP LINE_STRIP}, {@link GL11#GL_LINE_LOOP LINE_LOOP}, {@link GL11#GL_LINES LINES}, {@link GL11#GL_POLYGON POLYGON}, {@link GL11#GL_TRIANGLE_STRIP TRIANGLE_STRIP}, {@link GL11#GL_TRIANGLE_FAN TRIANGLE_FAN}, {@link GL11#GL_TRIANGLES TRIANGLES}, {@link GL11#GL_QUAD_STRIP QUAD_STRIP}, {@link GL11#GL_QUADS QUADS}, {@link GL32#GL_LINES_ADJACENCY LINES_ADJACENCY}, {@link GL32#GL_LINE_STRIP_ADJACENCY LINE_STRIP_ADJACENCY}, {@link GL32#GL_TRIANGLES_ADJACENCY TRIANGLES_ADJACENCY}, {@link GL32#GL_TRIANGLE_STRIP_ADJACENCY TRIANGLE_STRIP_ADJACENCY}, {@link GL40#GL_PATCHES PATCHES}
 	 * @param count     the number of elements to be rendered
 	 * @param type      the type of the values in {@code indices}. One of:<br>{@link GL11#GL_UNSIGNED_BYTE UNSIGNED_BYTE}, {@link GL11#GL_UNSIGNED_SHORT UNSIGNED_SHORT}, {@link GL11#GL_UNSIGNED_INT UNSIGNED_INT}
-	 * @param indices   a pointer to the location where the indices are stored
+	 * @param indices   the ByteBuffer containing the indices to be rendered
 	 * @param primcount the number of instances of the specified range of indices to be rendered
 	 */
 	public static void glDrawElementsInstanced(int mode, int count, int type, ByteBuffer indices, int primcount) {
@@ -445,7 +445,7 @@ public final class GL31 {
 		ByteBuffer[] uniformNamesBuffers = new ByteBuffer[uniformNames.length];
 		for ( int i = 0; i < uniformNames.length; i++ )
 			__buffer.pointerParam(uniformNamesAddress, i, memAddress(uniformNamesBuffers[i] = memEncodeASCII(uniformNames[i], true)));
-		nglGetUniformIndices(program, uniformNames.length, __buffer.address() + uniformNamesAddress, memAddress(uniformIndices));
+		nglGetUniformIndices(program, uniformNames.length, __buffer.address(uniformNamesAddress), memAddress(uniformIndices));
 	}
 
 	/** Single uniformName version of: {@link #glGetUniformIndices GetUniformIndices} */
@@ -454,7 +454,7 @@ public final class GL31 {
 		ByteBuffer uniformNameBuffers = memEncodeASCII(uniformName, true);
 		int uniformNamesAddress = __buffer.pointerParam(memAddress(uniformNameBuffers));
 		int uniformIndices = __buffer.intParam();
-		nglGetUniformIndices(program, 1, __buffer.address() + uniformNamesAddress, __buffer.address() + uniformIndices);
+		nglGetUniformIndices(program, 1, __buffer.address(uniformNamesAddress), __buffer.address(uniformIndices));
 		return __buffer.intValue(uniformIndices);
 	}
 
@@ -504,7 +504,7 @@ public final class GL31 {
 		APIBuffer __buffer = apiBuffer();
 		int params = __buffer.intParam();
 		int uniformIndices = __buffer.intParam(uniformIndex);
-		nglGetActiveUniformsiv(program, 1, __buffer.address() + uniformIndices, pname, __buffer.address() + params);
+		nglGetActiveUniformsiv(program, 1, __buffer.address(uniformIndices), pname, __buffer.address(params));
 		return __buffer.intValue(params);
 	}
 
@@ -554,8 +554,8 @@ public final class GL31 {
 		APIBuffer __buffer = apiBuffer();
 		int length = __buffer.intParam();
 		int uniformName = __buffer.bufferParam(bufSize);
-		nglGetActiveUniformName(program, uniformIndex, bufSize, __buffer.address() + length, __buffer.address() + uniformName);
-		return memDecodeASCII(memByteBuffer(__buffer.address() + uniformName, __buffer.intValue(length)));
+		nglGetActiveUniformName(program, uniformIndex, bufSize, __buffer.address(length), __buffer.address(uniformName));
+		return memDecodeASCII(memByteBuffer(__buffer.address(uniformName), __buffer.intValue(length)));
 	}
 
 	/** String return (w/ implicit max length) version of: {@link #glGetActiveUniformName GetActiveUniformName} */
@@ -564,8 +564,8 @@ public final class GL31 {
 		APIBuffer __buffer = apiBuffer();
 		int length = __buffer.intParam();
 		int uniformName = __buffer.bufferParam(bufSize);
-		nglGetActiveUniformName(program, uniformIndex, bufSize, __buffer.address() + length, __buffer.address() + uniformName);
-		return memDecodeASCII(memByteBuffer(__buffer.address() + uniformName, __buffer.intValue(length)));
+		nglGetActiveUniformName(program, uniformIndex, bufSize, __buffer.address(length), __buffer.address(uniformName));
+		return memDecodeASCII(memByteBuffer(__buffer.address(uniformName), __buffer.intValue(length)));
 	}
 
 	// --- [ glGetUniformBlockIndex ] ---
@@ -599,8 +599,9 @@ public final class GL31 {
 
 	/** CharSequence version of: {@link #glGetUniformBlockIndex GetUniformBlockIndex} */
 	public static int glGetUniformBlockIndex(int program, CharSequence uniformBlockName) {
-		ByteBuffer uniformBlockNameEncoded = memEncodeASCII(uniformBlockName);
-		return nglGetUniformBlockIndex(program, memAddress(uniformBlockNameEncoded));
+		APIBuffer __buffer = apiBuffer();
+		int uniformBlockNameEncoded = __buffer.stringParamASCII(uniformBlockName, true);
+		return nglGetUniformBlockIndex(program, __buffer.address(uniformBlockNameEncoded));
 	}
 
 	// --- [ glGetActiveUniformBlockiv ] ---
@@ -645,7 +646,7 @@ public final class GL31 {
 	public static int glGetActiveUniformBlocki(int program, int uniformBlockIndex, int pname) {
 		APIBuffer __buffer = apiBuffer();
 		int params = __buffer.intParam();
-		nglGetActiveUniformBlockiv(program, uniformBlockIndex, pname, __buffer.address() + params);
+		nglGetActiveUniformBlockiv(program, uniformBlockIndex, pname, __buffer.address(params));
 		return __buffer.intValue(params);
 	}
 
@@ -695,8 +696,8 @@ public final class GL31 {
 		APIBuffer __buffer = apiBuffer();
 		int length = __buffer.intParam();
 		int uniformBlockName = __buffer.bufferParam(bufSize);
-		nglGetActiveUniformBlockName(program, uniformBlockIndex, bufSize, __buffer.address() + length, __buffer.address() + uniformBlockName);
-		return memDecodeASCII(memByteBuffer(__buffer.address() + uniformBlockName, __buffer.intValue(length)));
+		nglGetActiveUniformBlockName(program, uniformBlockIndex, bufSize, __buffer.address(length), __buffer.address(uniformBlockName));
+		return memDecodeASCII(memByteBuffer(__buffer.address(uniformBlockName), __buffer.intValue(length)));
 	}
 
 	/** String return (w/ implicit max length) version of: {@link #glGetActiveUniformBlockName GetActiveUniformBlockName} */
@@ -705,8 +706,8 @@ public final class GL31 {
 		APIBuffer __buffer = apiBuffer();
 		int length = __buffer.intParam();
 		int uniformBlockName = __buffer.bufferParam(bufSize);
-		nglGetActiveUniformBlockName(program, uniformBlockIndex, bufSize, __buffer.address() + length, __buffer.address() + uniformBlockName);
-		return memDecodeASCII(memByteBuffer(__buffer.address() + uniformBlockName, __buffer.intValue(length)));
+		nglGetActiveUniformBlockName(program, uniformBlockIndex, bufSize, __buffer.address(length), __buffer.address(uniformBlockName));
+		return memDecodeASCII(memByteBuffer(__buffer.address(uniformBlockName), __buffer.intValue(length)));
 	}
 
 	// --- [ glUniformBlockBinding ] ---

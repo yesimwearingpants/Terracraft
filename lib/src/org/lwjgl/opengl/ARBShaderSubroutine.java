@@ -113,8 +113,9 @@ public final class ARBShaderSubroutine {
 
 	/** CharSequence version of: {@link #glGetSubroutineUniformLocation GetSubroutineUniformLocation} */
 	public static int glGetSubroutineUniformLocation(int program, int shadertype, CharSequence name) {
-		ByteBuffer nameEncoded = memEncodeASCII(name);
-		return nglGetSubroutineUniformLocation(program, shadertype, memAddress(nameEncoded));
+		APIBuffer __buffer = apiBuffer();
+		int nameEncoded = __buffer.stringParamASCII(name, true);
+		return nglGetSubroutineUniformLocation(program, shadertype, __buffer.address(nameEncoded));
 	}
 
 	// --- [ glGetSubroutineIndex ] ---
@@ -143,8 +144,9 @@ public final class ARBShaderSubroutine {
 
 	/** CharSequence version of: {@link #glGetSubroutineIndex GetSubroutineIndex} */
 	public static int glGetSubroutineIndex(int program, int shadertype, CharSequence name) {
-		ByteBuffer nameEncoded = memEncodeASCII(name);
-		return nglGetSubroutineIndex(program, shadertype, memAddress(nameEncoded));
+		APIBuffer __buffer = apiBuffer();
+		int nameEncoded = __buffer.stringParamASCII(name, true);
+		return nglGetSubroutineIndex(program, shadertype, __buffer.address(nameEncoded));
 	}
 
 	// --- [ glGetActiveSubroutineUniformiv ] ---
@@ -184,7 +186,7 @@ public final class ARBShaderSubroutine {
 	public static int glGetActiveSubroutineUniformi(int program, int shadertype, int index, int pname) {
 		APIBuffer __buffer = apiBuffer();
 		int values = __buffer.intParam();
-		nglGetActiveSubroutineUniformiv(program, shadertype, index, pname, __buffer.address() + values);
+		nglGetActiveSubroutineUniformiv(program, shadertype, index, pname, __buffer.address(values));
 		return __buffer.intValue(values);
 	}
 
@@ -229,8 +231,8 @@ public final class ARBShaderSubroutine {
 		APIBuffer __buffer = apiBuffer();
 		int length = __buffer.intParam();
 		int name = __buffer.bufferParam(bufsize);
-		nglGetActiveSubroutineUniformName(program, shadertype, index, bufsize, __buffer.address() + length, __buffer.address() + name);
-		return memDecodeASCII(memByteBuffer(__buffer.address() + name, __buffer.intValue(length)));
+		nglGetActiveSubroutineUniformName(program, shadertype, index, bufsize, __buffer.address(length), __buffer.address(name));
+		return memDecodeASCII(memByteBuffer(__buffer.address(name), __buffer.intValue(length)));
 	}
 
 	/** String return (w/ implicit max length) version of: {@link #glGetActiveSubroutineUniformName GetActiveSubroutineUniformName} */
@@ -239,8 +241,8 @@ public final class ARBShaderSubroutine {
 		APIBuffer __buffer = apiBuffer();
 		int length = __buffer.intParam();
 		int name = __buffer.bufferParam(bufsize);
-		nglGetActiveSubroutineUniformName(program, shadertype, index, bufsize, __buffer.address() + length, __buffer.address() + name);
-		return memDecodeASCII(memByteBuffer(__buffer.address() + name, __buffer.intValue(length)));
+		nglGetActiveSubroutineUniformName(program, shadertype, index, bufsize, __buffer.address(length), __buffer.address(name));
+		return memDecodeASCII(memByteBuffer(__buffer.address(name), __buffer.intValue(length)));
 	}
 
 	// --- [ glGetActiveSubroutineName ] ---
@@ -284,8 +286,8 @@ public final class ARBShaderSubroutine {
 		APIBuffer __buffer = apiBuffer();
 		int length = __buffer.intParam();
 		int name = __buffer.bufferParam(bufsize);
-		nglGetActiveSubroutineName(program, shadertype, index, bufsize, __buffer.address() + length, __buffer.address() + name);
-		return memDecodeASCII(memByteBuffer(__buffer.address() + name, __buffer.intValue(length)));
+		nglGetActiveSubroutineName(program, shadertype, index, bufsize, __buffer.address(length), __buffer.address(name));
+		return memDecodeASCII(memByteBuffer(__buffer.address(name), __buffer.intValue(length)));
 	}
 
 	/** String return (w/ implicit max length) version of: {@link #glGetActiveSubroutineName GetActiveSubroutineName} */
@@ -294,8 +296,8 @@ public final class ARBShaderSubroutine {
 		APIBuffer __buffer = apiBuffer();
 		int length = __buffer.intParam();
 		int name = __buffer.bufferParam(bufsize);
-		nglGetActiveSubroutineName(program, shadertype, index, bufsize, __buffer.address() + length, __buffer.address() + name);
-		return memDecodeASCII(memByteBuffer(__buffer.address() + name, __buffer.intValue(length)));
+		nglGetActiveSubroutineName(program, shadertype, index, bufsize, __buffer.address(length), __buffer.address(name));
+		return memDecodeASCII(memByteBuffer(__buffer.address(name), __buffer.intValue(length)));
 	}
 
 	// --- [ glUniformSubroutinesuiv ] ---
@@ -331,7 +333,7 @@ public final class ARBShaderSubroutine {
 	public static void glUniformSubroutinesui(int shadertype, int index) {
 		APIBuffer __buffer = apiBuffer();
 		int indices = __buffer.intParam(index);
-		nglUniformSubroutinesuiv(shadertype, 1, __buffer.address() + indices);
+		nglUniformSubroutinesuiv(shadertype, 1, __buffer.address(indices));
 	}
 
 	// --- [ glGetUniformSubroutineuiv ] ---
@@ -369,7 +371,7 @@ public final class ARBShaderSubroutine {
 	public static int glGetUniformSubroutineui(int shadertype, int location) {
 		APIBuffer __buffer = apiBuffer();
 		int params = __buffer.intParam();
-		nglGetUniformSubroutineuiv(shadertype, location, __buffer.address() + params);
+		nglGetUniformSubroutineuiv(shadertype, location, __buffer.address(params));
 		return __buffer.intValue(params);
 	}
 
@@ -409,7 +411,7 @@ public final class ARBShaderSubroutine {
 	public static int glGetProgramStagei(int program, int shadertype, int pname) {
 		APIBuffer __buffer = apiBuffer();
 		int values = __buffer.intParam();
-		nglGetProgramStageiv(program, shadertype, pname, __buffer.address() + values);
+		nglGetProgramStageiv(program, shadertype, pname, __buffer.address(values));
 		return __buffer.intValue(values);
 	}
 

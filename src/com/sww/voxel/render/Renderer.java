@@ -1,4 +1,4 @@
-package com.sww.terracraft.render;
+package com.sww.voxel.render;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-import com.sww.terracraft.render.models.RawModel;
+import com.sww.voxel.render.models.RawModel;
 
 public class Renderer {
 	
@@ -20,7 +20,7 @@ public class Renderer {
 	public static void render(RawModel model) {
 		GL30.glBindVertexArray(model.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
-		GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, model.getVertexCount());
+		GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 		GL20.glDisableVertexAttribArray(0);
 		GL30.glBindVertexArray(0);
 	}

@@ -1,4 +1,4 @@
-package com.sww.terracraft.render.models;
+package com.sww.voxel.render.models;
 
 public class RawModel {
 	

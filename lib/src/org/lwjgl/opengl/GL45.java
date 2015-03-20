@@ -417,7 +417,7 @@ public final class GL45 {
 	public static int glCreateTransformFeedbacks() {
 		APIBuffer __buffer = apiBuffer();
 		int ids = __buffer.intParam();
-		nglCreateTransformFeedbacks(1, __buffer.address() + ids);
+		nglCreateTransformFeedbacks(1, __buffer.address(ids));
 		return __buffer.intValue(ids);
 	}
 
@@ -508,7 +508,7 @@ public final class GL45 {
 	public static int glGetTransformFeedbacki(int xfb, int pname) {
 		APIBuffer __buffer = apiBuffer();
 		int param = __buffer.intParam();
-		nglGetTransformFeedbackiv(xfb, pname, __buffer.address() + param);
+		nglGetTransformFeedbackiv(xfb, pname, __buffer.address(param));
 		return __buffer.intValue(param);
 	}
 
@@ -554,7 +554,7 @@ public final class GL45 {
 	public static int glGetTransformFeedbacki(int xfb, int pname, int index) {
 		APIBuffer __buffer = apiBuffer();
 		int param = __buffer.intParam();
-		nglGetTransformFeedbacki_v(xfb, pname, index, __buffer.address() + param);
+		nglGetTransformFeedbacki_v(xfb, pname, index, __buffer.address(param));
 		return __buffer.intValue(param);
 	}
 
@@ -600,7 +600,7 @@ public final class GL45 {
 	public static long glGetTransformFeedbacki64(int xfb, int pname, int index) {
 		APIBuffer __buffer = apiBuffer();
 		int param = __buffer.longParam();
-		nglGetTransformFeedbacki64_v(xfb, pname, index, __buffer.address() + param);
+		nglGetTransformFeedbacki64_v(xfb, pname, index, __buffer.address(param));
 		return __buffer.longValue(param);
 	}
 
@@ -643,7 +643,7 @@ public final class GL45 {
 	public static int glCreateBuffers() {
 		APIBuffer __buffer = apiBuffer();
 		int buffers = __buffer.intParam();
-		nglCreateBuffers(1, __buffer.address() + buffers);
+		nglCreateBuffers(1, __buffer.address(buffers));
 		return __buffer.intValue(buffers);
 	}
 
@@ -906,25 +906,28 @@ public final class GL45 {
 	 * @param internalformat the internal format with which the data will be stored in the buffer object
 	 * @param format         the format of the data in memory addressed by {@code data}. One of:<br>{@link GL11#GL_STENCIL_INDEX STENCIL_INDEX}, {@link GL11#GL_DEPTH_COMPONENT DEPTH_COMPONENT}, {@link GL30#GL_DEPTH_STENCIL DEPTH_STENCIL}, {@link GL11#GL_RED RED}, {@link GL11#GL_GREEN GREEN}, {@link GL11#GL_BLUE BLUE}, {@link GL11#GL_ALPHA ALPHA}, {@link GL30#GL_RG RG}, {@link GL11#GL_RGB RGB}, {@link GL11#GL_RGBA RGBA}, {@link GL12#GL_BGR BGR}, {@link GL12#GL_BGRA BGRA}, {@link GL11#GL_LUMINANCE LUMINANCE}, {@link GL11#GL_LUMINANCE_ALPHA LUMINANCE_ALPHA}, {@link GL30#GL_RED_INTEGER RED_INTEGER}, {@link GL30#GL_GREEN_INTEGER GREEN_INTEGER}, {@link GL30#GL_BLUE_INTEGER BLUE_INTEGER}, {@link GL30#GL_ALPHA_INTEGER ALPHA_INTEGER}, {@link GL30#GL_RG_INTEGER RG_INTEGER}, {@link GL30#GL_RGB_INTEGER RGB_INTEGER}, {@link GL30#GL_RGBA_INTEGER RGBA_INTEGER}, {@link GL30#GL_BGR_INTEGER BGR_INTEGER}, {@link GL30#GL_BGRA_INTEGER BGRA_INTEGER}
 	 * @param type           the type of the data in memory addressed by {@code data}. One of:<br>{@link GL11#GL_UNSIGNED_BYTE UNSIGNED_BYTE}, {@link GL11#GL_BYTE BYTE}, {@link GL11#GL_UNSIGNED_SHORT UNSIGNED_SHORT}, {@link GL11#GL_SHORT SHORT}, {@link GL11#GL_UNSIGNED_INT UNSIGNED_INT}, {@link GL11#GL_INT INT}, {@link GL30#GL_HALF_FLOAT HALF_FLOAT}, {@link GL11#GL_FLOAT FLOAT}, {@link GL12#GL_UNSIGNED_BYTE_3_3_2 UNSIGNED_BYTE_3_3_2}, {@link GL12#GL_UNSIGNED_BYTE_2_3_3_REV UNSIGNED_BYTE_2_3_3_REV}, {@link GL12#GL_UNSIGNED_SHORT_5_6_5 UNSIGNED_SHORT_5_6_5}, {@link GL12#GL_UNSIGNED_SHORT_5_6_5_REV UNSIGNED_SHORT_5_6_5_REV}, {@link GL12#GL_UNSIGNED_SHORT_4_4_4_4 UNSIGNED_SHORT_4_4_4_4}, {@link GL12#GL_UNSIGNED_SHORT_4_4_4_4_REV UNSIGNED_SHORT_4_4_4_4_REV}, {@link GL12#GL_UNSIGNED_SHORT_5_5_5_1 UNSIGNED_SHORT_5_5_5_1}, {@link GL12#GL_UNSIGNED_SHORT_1_5_5_5_REV UNSIGNED_SHORT_1_5_5_5_REV}, {@link GL12#GL_UNSIGNED_INT_8_8_8_8 UNSIGNED_INT_8_8_8_8}, {@link GL12#GL_UNSIGNED_INT_8_8_8_8_REV UNSIGNED_INT_8_8_8_8_REV}, {@link GL12#GL_UNSIGNED_INT_10_10_10_2 UNSIGNED_INT_10_10_10_2}, {@link GL12#GL_UNSIGNED_INT_2_10_10_10_REV UNSIGNED_INT_2_10_10_10_REV}, {@link GL30#GL_UNSIGNED_INT_24_8 UNSIGNED_INT_24_8}, {@link GL30#GL_UNSIGNED_INT_10F_11F_11F_REV UNSIGNED_INT_10F_11F_11F_REV}, {@link GL30#GL_UNSIGNED_INT_5_9_9_9_REV UNSIGNED_INT_5_9_9_9_REV}, {@link GL30#GL_FLOAT_32_UNSIGNED_INT_24_8_REV FLOAT_32_UNSIGNED_INT_24_8_REV}, {@link GL11#GL_BITMAP BITMAP}
-	 * @param data           a memory location storing the data to be replicated into the buffer's data store
+	 * @param data           buffer containing the data to be used as the source of the constant fill value.
+	 *                       The elements of data are converted by the GL into the format specified by internalformat,
+	 *                       and then used to fill the specified range of the destination buffer.
+	 *                       If data is {@code NULL}, then it is ignored and the sub-range of the buffer is filled with zeros.
 	 */
 	public static void glClearNamedBufferData(int buffer, int internalformat, int format, int type, ByteBuffer data) {
-		nglClearNamedBufferData(buffer, internalformat, format, type, memAddress(data));
+		nglClearNamedBufferData(buffer, internalformat, format, type, memAddressSafe(data));
 	}
 
 	/** ShortBuffer version of: {@link #glClearNamedBufferData ClearNamedBufferData} */
 	public static void glClearNamedBufferData(int buffer, int internalformat, int format, int type, ShortBuffer data) {
-		nglClearNamedBufferData(buffer, internalformat, format, type, memAddress(data));
+		nglClearNamedBufferData(buffer, internalformat, format, type, memAddressSafe(data));
 	}
 
 	/** IntBuffer version of: {@link #glClearNamedBufferData ClearNamedBufferData} */
 	public static void glClearNamedBufferData(int buffer, int internalformat, int format, int type, IntBuffer data) {
-		nglClearNamedBufferData(buffer, internalformat, format, type, memAddress(data));
+		nglClearNamedBufferData(buffer, internalformat, format, type, memAddressSafe(data));
 	}
 
 	/** FloatBuffer version of: {@link #glClearNamedBufferData ClearNamedBufferData} */
 	public static void glClearNamedBufferData(int buffer, int internalformat, int format, int type, FloatBuffer data) {
-		nglClearNamedBufferData(buffer, internalformat, format, type, memAddress(data));
+		nglClearNamedBufferData(buffer, internalformat, format, type, memAddressSafe(data));
 	}
 
 	// --- [ glClearNamedBufferSubData ] ---
@@ -953,25 +956,28 @@ public final class GL45 {
 	 * @param size           the size, in basic machine units of the range of the data store to fill
 	 * @param format         the format of the data in memory addressed by {@code data}. One of:<br>{@link GL11#GL_STENCIL_INDEX STENCIL_INDEX}, {@link GL11#GL_DEPTH_COMPONENT DEPTH_COMPONENT}, {@link GL30#GL_DEPTH_STENCIL DEPTH_STENCIL}, {@link GL11#GL_RED RED}, {@link GL11#GL_GREEN GREEN}, {@link GL11#GL_BLUE BLUE}, {@link GL11#GL_ALPHA ALPHA}, {@link GL30#GL_RG RG}, {@link GL11#GL_RGB RGB}, {@link GL11#GL_RGBA RGBA}, {@link GL12#GL_BGR BGR}, {@link GL12#GL_BGRA BGRA}, {@link GL11#GL_LUMINANCE LUMINANCE}, {@link GL11#GL_LUMINANCE_ALPHA LUMINANCE_ALPHA}, {@link GL30#GL_RED_INTEGER RED_INTEGER}, {@link GL30#GL_GREEN_INTEGER GREEN_INTEGER}, {@link GL30#GL_BLUE_INTEGER BLUE_INTEGER}, {@link GL30#GL_ALPHA_INTEGER ALPHA_INTEGER}, {@link GL30#GL_RG_INTEGER RG_INTEGER}, {@link GL30#GL_RGB_INTEGER RGB_INTEGER}, {@link GL30#GL_RGBA_INTEGER RGBA_INTEGER}, {@link GL30#GL_BGR_INTEGER BGR_INTEGER}, {@link GL30#GL_BGRA_INTEGER BGRA_INTEGER}
 	 * @param type           the type of the data in memory addressed by {@code data}. One of:<br>{@link GL11#GL_UNSIGNED_BYTE UNSIGNED_BYTE}, {@link GL11#GL_BYTE BYTE}, {@link GL11#GL_UNSIGNED_SHORT UNSIGNED_SHORT}, {@link GL11#GL_SHORT SHORT}, {@link GL11#GL_UNSIGNED_INT UNSIGNED_INT}, {@link GL11#GL_INT INT}, {@link GL30#GL_HALF_FLOAT HALF_FLOAT}, {@link GL11#GL_FLOAT FLOAT}, {@link GL12#GL_UNSIGNED_BYTE_3_3_2 UNSIGNED_BYTE_3_3_2}, {@link GL12#GL_UNSIGNED_BYTE_2_3_3_REV UNSIGNED_BYTE_2_3_3_REV}, {@link GL12#GL_UNSIGNED_SHORT_5_6_5 UNSIGNED_SHORT_5_6_5}, {@link GL12#GL_UNSIGNED_SHORT_5_6_5_REV UNSIGNED_SHORT_5_6_5_REV}, {@link GL12#GL_UNSIGNED_SHORT_4_4_4_4 UNSIGNED_SHORT_4_4_4_4}, {@link GL12#GL_UNSIGNED_SHORT_4_4_4_4_REV UNSIGNED_SHORT_4_4_4_4_REV}, {@link GL12#GL_UNSIGNED_SHORT_5_5_5_1 UNSIGNED_SHORT_5_5_5_1}, {@link GL12#GL_UNSIGNED_SHORT_1_5_5_5_REV UNSIGNED_SHORT_1_5_5_5_REV}, {@link GL12#GL_UNSIGNED_INT_8_8_8_8 UNSIGNED_INT_8_8_8_8}, {@link GL12#GL_UNSIGNED_INT_8_8_8_8_REV UNSIGNED_INT_8_8_8_8_REV}, {@link GL12#GL_UNSIGNED_INT_10_10_10_2 UNSIGNED_INT_10_10_10_2}, {@link GL12#GL_UNSIGNED_INT_2_10_10_10_REV UNSIGNED_INT_2_10_10_10_REV}, {@link GL30#GL_UNSIGNED_INT_24_8 UNSIGNED_INT_24_8}, {@link GL30#GL_UNSIGNED_INT_10F_11F_11F_REV UNSIGNED_INT_10F_11F_11F_REV}, {@link GL30#GL_UNSIGNED_INT_5_9_9_9_REV UNSIGNED_INT_5_9_9_9_REV}, {@link GL30#GL_FLOAT_32_UNSIGNED_INT_24_8_REV FLOAT_32_UNSIGNED_INT_24_8_REV}, {@link GL11#GL_BITMAP BITMAP}
-	 * @param data           a memory location storing the data to be replicated into the buffer's data store
+	 * @param data           buffer containing the data to be used as the source of the constant fill value.
+	 *                       The elements of data are converted by the GL into the format specified by internalformat,
+	 *                       and then used to fill the specified range of the destination buffer.
+	 *                       If data is {@code NULL}, then it is ignored and the sub-range of the buffer is filled with zeros.
 	 */
 	public static void glClearNamedBufferSubData(int buffer, int internalformat, long offset, long size, int format, int type, ByteBuffer data) {
-		nglClearNamedBufferSubData(buffer, internalformat, offset, size, format, type, memAddress(data));
+		nglClearNamedBufferSubData(buffer, internalformat, offset, size, format, type, memAddressSafe(data));
 	}
 
 	/** ShortBuffer version of: {@link #glClearNamedBufferSubData ClearNamedBufferSubData} */
 	public static void glClearNamedBufferSubData(int buffer, int internalformat, long offset, long size, int format, int type, ShortBuffer data) {
-		nglClearNamedBufferSubData(buffer, internalformat, offset, size, format, type, memAddress(data));
+		nglClearNamedBufferSubData(buffer, internalformat, offset, size, format, type, memAddressSafe(data));
 	}
 
 	/** IntBuffer version of: {@link #glClearNamedBufferSubData ClearNamedBufferSubData} */
 	public static void glClearNamedBufferSubData(int buffer, int internalformat, long offset, long size, int format, int type, IntBuffer data) {
-		nglClearNamedBufferSubData(buffer, internalformat, offset, size, format, type, memAddress(data));
+		nglClearNamedBufferSubData(buffer, internalformat, offset, size, format, type, memAddressSafe(data));
 	}
 
 	/** FloatBuffer version of: {@link #glClearNamedBufferSubData ClearNamedBufferSubData} */
 	public static void glClearNamedBufferSubData(int buffer, int internalformat, long offset, long size, int format, int type, FloatBuffer data) {
-		nglClearNamedBufferSubData(buffer, internalformat, offset, size, format, type, memAddress(data));
+		nglClearNamedBufferSubData(buffer, internalformat, offset, size, format, type, memAddressSafe(data));
 	}
 
 	// --- [ glMapNamedBuffer ] ---
@@ -999,7 +1005,7 @@ public final class GL45 {
 	 */
 	public static ByteBuffer glMapNamedBuffer(int buffer, int access) {
 		long __result = nglMapNamedBuffer(buffer, access);
-		return memByteBuffer(__result, glGetNamedBufferParameteri(buffer, GL15.GL_BUFFER_SIZE));
+		return memByteBuffer(__result, (int)glGetNamedBufferParameteri(buffer, GL15.GL_BUFFER_SIZE));
 	}
 
 	/** Alternative version of: {@link #glMapNamedBuffer MapNamedBuffer} */
@@ -1012,7 +1018,7 @@ public final class GL45 {
 	/** Explicit size alternative version of: {@link #glMapNamedBuffer MapNamedBuffer} */
 	public static ByteBuffer glMapNamedBuffer(int buffer, int access, long length, ByteBuffer old_buffer) {
 		long __result = nglMapNamedBuffer(buffer, access);
-		return old_buffer != null && __result == memAddress0(old_buffer) && old_buffer.capacity() == length ? old_buffer : memByteBuffer(__result, length);
+		return old_buffer != null && __result == memAddress0(old_buffer) && old_buffer.capacity() == length ? old_buffer : memByteBuffer(__result, (int)length);
 	}
 
 	// --- [ glMapNamedBufferRange ] ---
@@ -1042,13 +1048,13 @@ public final class GL45 {
 	 */
 	public static ByteBuffer glMapNamedBufferRange(int buffer, long offset, long length, int access) {
 		long __result = nglMapNamedBufferRange(buffer, offset, length, access);
-		return memByteBuffer(__result, length);
+		return memByteBuffer(__result, (int)length);
 	}
 
 	/** Alternative version of: {@link #glMapNamedBufferRange MapNamedBufferRange} */
 	public static ByteBuffer glMapNamedBufferRange(int buffer, long offset, long length, int access, ByteBuffer old_buffer) {
 		long __result = nglMapNamedBufferRange(buffer, offset, length, access);
-		return old_buffer != null && __result == memAddress0(old_buffer) && old_buffer.capacity() == length ? old_buffer : memByteBuffer(__result, length);
+		return old_buffer != null && __result == memAddress0(old_buffer) && old_buffer.capacity() == length ? old_buffer : memByteBuffer(__result, (int)length);
 	}
 
 	// --- [ glUnmapNamedBuffer ] ---
@@ -1134,7 +1140,7 @@ public final class GL45 {
 	public static int glGetNamedBufferParameteri(int buffer, int pname) {
 		APIBuffer __buffer = apiBuffer();
 		int params = __buffer.intParam();
-		nglGetNamedBufferParameteriv(buffer, pname, __buffer.address() + params);
+		nglGetNamedBufferParameteriv(buffer, pname, __buffer.address(params));
 		return __buffer.intValue(params);
 	}
 
@@ -1179,7 +1185,7 @@ public final class GL45 {
 	public static long glGetNamedBufferParameteri64(int buffer, int pname) {
 		APIBuffer __buffer = apiBuffer();
 		int params = __buffer.longParam();
-		nglGetNamedBufferParameteri64v(buffer, pname, __buffer.address() + params);
+		nglGetNamedBufferParameteri64v(buffer, pname, __buffer.address(params));
 		return __buffer.longValue(params);
 	}
 
@@ -1224,7 +1230,7 @@ public final class GL45 {
 	public static long glGetNamedBufferPointer(int buffer, int pname) {
 		APIBuffer __buffer = apiBuffer();
 		int params = __buffer.pointerParam();
-		nglGetNamedBufferPointerv(buffer, pname, __buffer.address() + params);
+		nglGetNamedBufferPointerv(buffer, pname, __buffer.address(params));
 		return __buffer.pointerValue(params);
 	}
 
@@ -1322,7 +1328,7 @@ public final class GL45 {
 	public static int glCreateFramebuffers() {
 		APIBuffer __buffer = apiBuffer();
 		int framebuffers = __buffer.intParam();
-		nglCreateFramebuffers(1, __buffer.address() + framebuffers);
+		nglCreateFramebuffers(1, __buffer.address(framebuffers));
 		return __buffer.intValue(framebuffers);
 	}
 
@@ -1478,7 +1484,7 @@ public final class GL45 {
 	public static void glNamedFramebufferDrawBuffers(int framebuffer, int buf) {
 		APIBuffer __buffer = apiBuffer();
 		int bufs = __buffer.intParam(buf);
-		nglNamedFramebufferDrawBuffers(framebuffer, 1, __buffer.address() + bufs);
+		nglNamedFramebufferDrawBuffers(framebuffer, 1, __buffer.address(bufs));
 	}
 
 	// --- [ glNamedFramebufferReadBuffer ] ---
@@ -1541,7 +1547,7 @@ public final class GL45 {
 	public static void glInvalidateNamedFramebufferData(int framebuffer, int attachment) {
 		APIBuffer __buffer = apiBuffer();
 		int attachments = __buffer.intParam(attachment);
-		nglInvalidateNamedFramebufferData(framebuffer, 1, __buffer.address() + attachments);
+		nglInvalidateNamedFramebufferData(framebuffer, 1, __buffer.address(attachments));
 	}
 
 	// --- [ glInvalidateNamedFramebufferSubData ] ---
@@ -1587,7 +1593,7 @@ public final class GL45 {
 	public static void glInvalidateNamedFramebufferSubData(int framebuffer, int attachment, int x, int y, int width, int height) {
 		APIBuffer __buffer = apiBuffer();
 		int attachments = __buffer.intParam(attachment);
-		nglInvalidateNamedFramebufferSubData(framebuffer, 1, __buffer.address() + attachments, x, y, width, height);
+		nglInvalidateNamedFramebufferSubData(framebuffer, 1, __buffer.address(attachments), x, y, width, height);
 	}
 
 	// --- [ glClearNamedFramebufferiv ] ---
@@ -1822,7 +1828,7 @@ public final class GL45 {
 	public static int glGetNamedFramebufferParameteri(int framebuffer, int pname) {
 		APIBuffer __buffer = apiBuffer();
 		int params = __buffer.intParam();
-		nglGetNamedFramebufferParameteriv(framebuffer, pname, __buffer.address() + params);
+		nglGetNamedFramebufferParameteriv(framebuffer, pname, __buffer.address(params));
 		return __buffer.intValue(params);
 	}
 
@@ -1868,7 +1874,7 @@ public final class GL45 {
 	public static int glGetNamedFramebufferAttachmentParameteri(int framebuffer, int attachment, int pname) {
 		APIBuffer __buffer = apiBuffer();
 		int params = __buffer.intParam();
-		nglGetNamedFramebufferAttachmentParameteriv(framebuffer, attachment, pname, __buffer.address() + params);
+		nglGetNamedFramebufferAttachmentParameteriv(framebuffer, attachment, pname, __buffer.address(params));
 		return __buffer.intValue(params);
 	}
 
@@ -1910,7 +1916,7 @@ public final class GL45 {
 	public static int glCreateRenderbuffers() {
 		APIBuffer __buffer = apiBuffer();
 		int renderbuffers = __buffer.intParam();
-		nglCreateRenderbuffers(1, __buffer.address() + renderbuffers);
+		nglCreateRenderbuffers(1, __buffer.address(renderbuffers));
 		return __buffer.intValue(renderbuffers);
 	}
 
@@ -2002,7 +2008,7 @@ public final class GL45 {
 	public static int glGetNamedRenderbufferParameteri(int renderbuffer, int pname) {
 		APIBuffer __buffer = apiBuffer();
 		int params = __buffer.intParam();
-		nglGetNamedRenderbufferParameteriv(renderbuffer, pname, __buffer.address() + params);
+		nglGetNamedRenderbufferParameteriv(renderbuffer, pname, __buffer.address(params));
 		return __buffer.intValue(params);
 	}
 
@@ -2045,7 +2051,7 @@ public final class GL45 {
 	public static int glCreateTextures(int target) {
 		APIBuffer __buffer = apiBuffer();
 		int textures = __buffer.intParam();
-		nglCreateTextures(target, 1, __buffer.address() + textures);
+		nglCreateTextures(target, 1, __buffer.address(textures));
 		return __buffer.intValue(textures);
 	}
 
@@ -2791,7 +2797,7 @@ public final class GL45 {
 	public static void glTextureParameterIi(int texture, int pname, int param) {
 		APIBuffer __buffer = apiBuffer();
 		int params = __buffer.intParam(param);
-		nglTextureParameterIiv(texture, pname, __buffer.address() + params);
+		nglTextureParameterIiv(texture, pname, __buffer.address(params));
 	}
 
 	// --- [ glTextureParameterIuiv ] ---
@@ -2835,7 +2841,7 @@ public final class GL45 {
 	public static void glTextureParameterIui(int texture, int pname, int param) {
 		APIBuffer __buffer = apiBuffer();
 		int params = __buffer.intParam(param);
-		nglTextureParameterIuiv(texture, pname, __buffer.address() + params);
+		nglTextureParameterIuiv(texture, pname, __buffer.address(params));
 	}
 
 	// --- [ glTextureParameteriv ] ---
@@ -3084,7 +3090,7 @@ public final class GL45 {
 	public static float glGetTextureLevelParameterf(int texture, int level, int pname) {
 		APIBuffer __buffer = apiBuffer();
 		int params = __buffer.floatParam();
-		nglGetTextureLevelParameterfv(texture, level, pname, __buffer.address() + params);
+		nglGetTextureLevelParameterfv(texture, level, pname, __buffer.address(params));
 		return __buffer.floatValue(params);
 	}
 
@@ -3130,7 +3136,7 @@ public final class GL45 {
 	public static int glGetTextureLevelParameteri(int texture, int level, int pname) {
 		APIBuffer __buffer = apiBuffer();
 		int params = __buffer.intParam();
-		nglGetTextureLevelParameteriv(texture, level, pname, __buffer.address() + params);
+		nglGetTextureLevelParameteriv(texture, level, pname, __buffer.address(params));
 		return __buffer.intValue(params);
 	}
 
@@ -3175,7 +3181,7 @@ public final class GL45 {
 	public static float glGetTextureParameterf(int texture, int pname) {
 		APIBuffer __buffer = apiBuffer();
 		int params = __buffer.floatParam();
-		nglGetTextureParameterfv(texture, pname, __buffer.address() + params);
+		nglGetTextureParameterfv(texture, pname, __buffer.address(params));
 		return __buffer.floatValue(params);
 	}
 
@@ -3220,7 +3226,7 @@ public final class GL45 {
 	public static int glGetTextureParameterIi(int texture, int pname) {
 		APIBuffer __buffer = apiBuffer();
 		int params = __buffer.intParam();
-		nglGetTextureParameterIiv(texture, pname, __buffer.address() + params);
+		nglGetTextureParameterIiv(texture, pname, __buffer.address(params));
 		return __buffer.intValue(params);
 	}
 
@@ -3265,7 +3271,7 @@ public final class GL45 {
 	public static int glGetTextureParameterIui(int texture, int pname) {
 		APIBuffer __buffer = apiBuffer();
 		int params = __buffer.intParam();
-		nglGetTextureParameterIuiv(texture, pname, __buffer.address() + params);
+		nglGetTextureParameterIuiv(texture, pname, __buffer.address(params));
 		return __buffer.intValue(params);
 	}
 
@@ -3310,7 +3316,7 @@ public final class GL45 {
 	public static int glGetTextureParameteri(int texture, int pname) {
 		APIBuffer __buffer = apiBuffer();
 		int params = __buffer.intParam();
-		nglGetTextureParameteriv(texture, pname, __buffer.address() + params);
+		nglGetTextureParameteriv(texture, pname, __buffer.address(params));
 		return __buffer.intValue(params);
 	}
 
@@ -3352,7 +3358,7 @@ public final class GL45 {
 	public static int glCreateVertexArrays() {
 		APIBuffer __buffer = apiBuffer();
 		int arrays = __buffer.intParam();
-		nglCreateVertexArrays(1, __buffer.address() + arrays);
+		nglCreateVertexArrays(1, __buffer.address(arrays));
 		return __buffer.intValue(arrays);
 	}
 
@@ -3647,7 +3653,7 @@ public final class GL45 {
 	public static int glGetVertexArrayi(int vaobj, int pname) {
 		APIBuffer __buffer = apiBuffer();
 		int param = __buffer.intParam();
-		nglGetVertexArrayiv(vaobj, pname, __buffer.address() + param);
+		nglGetVertexArrayiv(vaobj, pname, __buffer.address(param));
 		return __buffer.intValue(param);
 	}
 
@@ -3693,7 +3699,7 @@ public final class GL45 {
 	public static int glGetVertexArrayIndexedi(int vaobj, int index, int pname) {
 		APIBuffer __buffer = apiBuffer();
 		int param = __buffer.intParam();
-		nglGetVertexArrayIndexediv(vaobj, index, pname, __buffer.address() + param);
+		nglGetVertexArrayIndexediv(vaobj, index, pname, __buffer.address(param));
 		return __buffer.intValue(param);
 	}
 
@@ -3739,7 +3745,7 @@ public final class GL45 {
 	public static long glGetVertexArrayIndexed64i(int vaobj, int index, int pname) {
 		APIBuffer __buffer = apiBuffer();
 		int param = __buffer.longParam();
-		nglGetVertexArrayIndexed64iv(vaobj, index, pname, __buffer.address() + param);
+		nglGetVertexArrayIndexed64iv(vaobj, index, pname, __buffer.address(param));
 		return __buffer.longValue(param);
 	}
 
@@ -3781,7 +3787,7 @@ public final class GL45 {
 	public static int glCreateSamplers() {
 		APIBuffer __buffer = apiBuffer();
 		int samplers = __buffer.intParam();
-		nglCreateSamplers(1, __buffer.address() + samplers);
+		nglCreateSamplers(1, __buffer.address(samplers));
 		return __buffer.intValue(samplers);
 	}
 
@@ -3823,7 +3829,7 @@ public final class GL45 {
 	public static int glCreateProgramPipelines() {
 		APIBuffer __buffer = apiBuffer();
 		int pipelines = __buffer.intParam();
-		nglCreateProgramPipelines(1, __buffer.address() + pipelines);
+		nglCreateProgramPipelines(1, __buffer.address(pipelines));
 		return __buffer.intValue(pipelines);
 	}
 
@@ -3866,7 +3872,7 @@ public final class GL45 {
 	public static int glCreateQueries(int target) {
 		APIBuffer __buffer = apiBuffer();
 		int ids = __buffer.intParam();
-		nglCreateQueries(target, 1, __buffer.address() + ids);
+		nglCreateQueries(target, 1, __buffer.address(ids));
 		return __buffer.intValue(ids);
 	}
 

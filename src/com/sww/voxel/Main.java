@@ -1,17 +1,17 @@
-package com.sww.terracraft;
-
-import org.lwjgl.Sys;
-import org.lwjgl.glfw.*;
-import org.lwjgl.opengl.*;
-
-import com.sww.terracraft.render.Renderer;
-
-import java.nio.ByteBuffer;
+package com.sww.voxel;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.*;
+
+import java.nio.ByteBuffer;
+
+import org.lwjgl.Sys;
+import org.lwjgl.glfw.*;
+import org.lwjgl.opengl.*;
+
+import com.sww.voxel.render.Renderer;
  
 public class Main {
  
@@ -20,7 +20,7 @@ public class Main {
     private GLFWKeyCallback   keyCallback;
  
     // The window handle
-    private long window;
+    public long window;
  
     public void run() {
         System.out.println("Hello LWJGL " + Sys.getVersion() + "!");
@@ -114,7 +114,7 @@ public class Main {
     }
  
     public static void main(String[] args) {
-        new Main().run();
+        new Main();
     }
  
 }
