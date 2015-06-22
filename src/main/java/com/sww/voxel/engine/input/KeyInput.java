@@ -12,25 +12,24 @@
  * accompanied this code).
  * 
  * @author yesimwearingpants
- * Created Jun 19, 2015
+ * Created Jun 21, 2015
  */
-package com.sww.voxel.engine;
+package com.sww.voxel.engine.input;
 
-public class Time {
+import static org.lwjgl.glfw.GLFW.*;
+import org.lwjgl.glfw.GLFWKeyCallback;
 
-	private static double delta;
-	public static long SECOND = 1000000000L;
-	
-	public static long getTime() {
-		return System.nanoTime();
+public class KeyInput extends GLFWKeyCallback {
+
+	public static boolean[] keys = new boolean[65536];
+
+	@Override
+	public void invoke(long window, int key, int scancode, int action, int mods) {
+		keys[key] = action != GLFW_RELEASE;
 	}
 
-	public static double getDelta() {
-		return delta;
-	}
-
-	public static void setDelta(double delta) {
-		Time.delta = delta;
+	public static boolean isKeyDown(int keycode) {
+		return keys[keycode];
 	}
 
 }

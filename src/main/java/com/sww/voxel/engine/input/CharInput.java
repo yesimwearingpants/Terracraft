@@ -12,25 +12,17 @@
  * accompanied this code).
  * 
  * @author yesimwearingpants
- * Created Jun 19, 2015
+ * Created Jun 21, 2015
  */
-package com.sww.voxel.engine;
+package com.sww.voxel.engine.input;
 
-public class Time {
+import org.lwjgl.glfw.GLFWCharCallback;
 
-	private static double delta;
-	public static long SECOND = 1000000000L;
-	
-	public static long getTime() {
-		return System.nanoTime();
-	}
+public class CharInput extends GLFWCharCallback {
 
-	public static double getDelta() {
-		return delta;
-	}
-
-	public static void setDelta(double delta) {
-		Time.delta = delta;
+	@Override
+	public void invoke(long window, int codepoint) {
+		
 	}
 
 }

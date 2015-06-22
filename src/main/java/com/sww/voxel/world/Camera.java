@@ -12,25 +12,10 @@
  * accompanied this code).
  * 
  * @author yesimwearingpants
- * Created Jun 19, 2015
+ * Created Jun 22, 2015
  */
-package com.sww.voxel.engine;
+package com.sww.voxel.world;
 
-public class Time {
-
-	private static double delta;
-	public static long SECOND = 1000000000L;
-	
-	public static long getTime() {
-		return System.nanoTime();
-	}
-
-	public static double getDelta() {
-		return delta;
-	}
-
-	public static void setDelta(double delta) {
-		Time.delta = delta;
-	}
+public class Camera {
 
 }

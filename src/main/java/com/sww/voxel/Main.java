@@ -1,114 +1,121 @@
+/**
+ * Copyright (c) 2015 Greg Wright
+ *
+ * This code is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 3 only, as
+ * published by the Free Software Foundation.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ * version 3 for more details (a copy is included in the LICENSE file that
+ * accompanied this code).
+ * 
+ * @author yesimwearingpants
+ * Created Jun 17, 2015
+ */
 package com.sww.voxel;
 
-import org.lwjgl.glfw.*;
-import org.lwjgl.opengl.*;
- 
-import java.nio.ByteBuffer;
- 
-import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.*;
- 
+
+import java.nio.ByteBuffer;
+
+import org.lwjgl.glfw.Callbacks;
+import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWvidmode;
+
+import com.sww.voxel.engine.input.KeyInput;
+import com.sww.voxel.engine.input.MouseInput;
+import com.sww.voxel.state.PlayGame;
+
 public class Main {
- 
+
     // We need to strongly reference callback instances.
     private GLFWErrorCallback errorCallback;
-    private GLFWKeyCallback   keyCallback;
- 
-    // The window handle
-    private long window;
- 
+    private KeyInput keyCallback;
+    private MouseInput mouseCallback;	
+    
+	private int vSync = 0;
+
+    private static boolean isRunning = false;
+    private static long window;
+
     public void run() {
         try {
             init();
-            loop();
- 
-            // Release window and window callbacks
+            PlayGame play = new PlayGame();
+            play.loop();
+            //TODO: pass loop() as arg or something;
+
             glfwDestroyWindow(window);
             keyCallback.release();
+            mouseCallback.release();
         } finally {
-            // Terminate GLFW and release the GLFWerrorfun
             glfwTerminate();
             errorCallback.release();
         }
     }
- 
+
     private void init() {
-        // Setup an error callback. The default implementation
-        // will print the error message in System.err.
-        glfwSetErrorCallback(errorCallback = errorCallbackPrint(System.err));
- 
-        // Initialize GLFW. Most GLFW functions will not work before doing this.
-        if ( glfwInit() != GL11.GL_TRUE )
+        glfwSetErrorCallback(errorCallback = Callbacks.errorCallbackPrint(System.err));
+
+        if (glfwInit() != GL_TRUE )
             throw new IllegalStateException("Unable to initialize GLFW");
- 
-        // Configure our window
+
         glfwDefaultWindowHints(); // optional, the current window hints are already the default
         glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // the window will stay hidden after creation
         glfwWindowHint(GLFW_RESIZABLE, GL_TRUE); // the window will be resizable
- 
-        int WIDTH = 300;
-        int HEIGHT = 300;
- 
-        // Create the window
+
+        int WIDTH = 720;
+        int HEIGHT = 480;
+
         window = glfwCreateWindow(WIDTH, HEIGHT, "Hello World!", NULL, NULL);
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
- 
-        // Setup a key callback. It will be called every time a key is pressed, repeated or released.
-        glfwSetKeyCallback(window, keyCallback = new GLFWKeyCallback() {
-            @Override
-            public void invoke(long window, int key, int scancode, int action, int mods) {
-                if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
-                    glfwSetWindowShouldClose(window, GL_TRUE); // We will detect this in our rendering loop
-            }
-        });
- 
-        // Get the resolution of the primary monitor
+
         ByteBuffer vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-        // Center our window
         glfwSetWindowPos(
             window,
             (GLFWvidmode.width(vidmode) - WIDTH) / 2,
             (GLFWvidmode.height(vidmode) - HEIGHT) / 2
         );
- 
-        // Make the OpenGL context current
+
         glfwMakeContextCurrent(window);
-        // Enable v-sync
-        glfwSwapInterval(1);
- 
-        // Make the window visible
+        glfwSwapInterval(vSync);
         glfwShowWindow(window);
     }
- 
-    private void loop() {
-        // This line is critical for LWJGL's interoperation with GLFW's
-        // OpenGL context, or any context that is managed externally.
-        // LWJGL detects the context that is current in the current thread,
-        // creates the ContextCapabilities instance and makes the OpenGL
-        // bindings available for use.
-        GLContext.createFromCurrent();
- 
-        // Set the clear color
-        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
- 
-        // Run the rendering loop until the user has attempted to close
-        // the window or has pressed the ESCAPE key.
-        while ( glfwWindowShouldClose(window) == GL_FALSE ) {
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
- 
-            glfwSwapBuffers(window); // swap the color buffers
- 
-            // Poll for window events. The key callback above will only be
-            // invoked during this call.
-            glfwPollEvents();
-        }
+
+    public void start() {
+    	if(isRunning) {
+    		throw new IllegalStateException("Already Running");
+    	}
+    	run();
     }
- 
+
     public static void main(String[] args) {
         new Main().run();
     }
+
+    public static long getWindow() {
+		return window;
+    }
+
+	public static boolean isRunning() {
+		return isRunning;
+	}
+
+	public static void setRunning(boolean running) {
+		isRunning = running;
+	}
+
+	public int getvSync() {
+		return vSync;
+	}
+
+	public void setvSync(int vSync) {
+		this.vSync = vSync;
+	}
  
 }

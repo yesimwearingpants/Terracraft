@@ -16,21 +16,39 @@
  */
 package com.sww.voxel.engine;
 
-public class Time {
+import static org.lwjgl.glfw.GLFW.*;
 
-	private static double delta;
-	public static long SECOND = 1000000000L;
-	
-	public static long getTime() {
-		return System.nanoTime();
+import org.lwjgl.glfw.GLFW;
+
+import com.sww.voxel.engine.input.KeyInput;
+
+public class Game {
+
+	public Game() {
+		
 	}
 
-	public static double getDelta() {
-		return delta;
+	public void input() {
+		if(KeyInput.isKeyDown(GLFW_KEY_UP)) {
+			
+		}
+		if(KeyInput.isKeyDown(GLFW_KEY_DOWN)) {
+			
+		}
+		if(KeyInput.isKeyDown(GLFW_KEY_LEFT)) {
+					
+		}
+		if(KeyInput.isKeyDown(GLFW_KEY_RIGHT)) {
+			
+		}
 	}
 
-	public static void setDelta(double delta) {
-		Time.delta = delta;
+	public void update() {
+		
+	}
+
+	public void render() {
+		
 	}
 
 }

@@ -12,25 +12,30 @@
  * accompanied this code).
  * 
  * @author yesimwearingpants
- * Created Jun 19, 2015
+ * Created June 15, 2015
  */
-package com.sww.voxel.engine;
+package com.sww.voxel.lang;
 
-public class Time {
+import java.util.Locale;
+import java.util.ResourceBundle;
 
-	private static double delta;
-	public static long SECOND = 1000000000L;
+public class I18n {
+
+	public final ResourceBundle lang;
 	
-	public static long getTime() {
-		return System.nanoTime();
+	public I18n() {
+		this.lang = ResourceBundle.getBundle("com.sww.launcher.lang.", Locale.getDefault());
 	}
 
-	public static double getDelta() {
-		return delta;
+	public I18n(String lang, String country) {
+		Locale locale = new Locale(lang, country);
+		this.lang = ResourceBundle.getBundle("com.sww.launcher.lang.", locale);
+	}
+	
+	public I18n(Locale locale) {
+		this.lang = ResourceBundle.getBundle("com.sww.launcher.lang.", locale);
 	}
 
-	public static void setDelta(double delta) {
-		Time.delta = delta;
-	}
+	
 
 }
