@@ -21,7 +21,6 @@ import static org.lwjgl.opengl.GL11.*;
 
 import org.lwjgl.opengl.GLContext;
 
-import com.sww.voxel.Main;
 import com.sww.voxel.engine.Game;
 import com.sww.voxel.engine.Time;
 
@@ -44,8 +43,8 @@ public class LoadScreen extends GameState{
         long lastTime = Time.getTime();
         double unprocessedTime = 0;
 
-        Main.setRunning(true);
-        while(Main.isRunning()) {
+        setRunning(true);
+        while(isRunning()) {
         	boolean render = false;
 
         	final double frameTime = 1.0 / FRAMECAP;
@@ -60,7 +59,7 @@ public class LoadScreen extends GameState{
         	while(unprocessedTime > frameTime) {
         		render = true;
         		unprocessedTime -= frameTime;
-	        	if(glfwWindowShouldClose(Main.getWindow()) == GL_TRUE ) {
+	        	if(isCloseRequested()) {
 	        		stop();
 	        	}
 	        	Time.setDelta(frameTime);
@@ -73,14 +72,14 @@ public class LoadScreen extends GameState{
 	        		frameCounter = 0;
 	        	}
         	}
-        	if(render && glfwWindowShouldClose(Main.getWindow()) == GL_FALSE) {
+        	if(render && !isCloseRequested()) {
         		if(frames <= 60) {
-        			Main.setRunning(false);
+        			setRunning(false);
         		}
         		game.render();
 
 	            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	            glfwSwapBuffers(Main.getWindow());
+	            glfwSwapBuffers(getWindow());
 	            glfwWaitEvents();
 	            frames++;
         	} else {
@@ -94,10 +93,10 @@ public class LoadScreen extends GameState{
     }
 
     private void stop() {
-    	if(!Main.isRunning()) {
+    	if(!isRunning()) {
     		return;
     	}
-    	Main.setRunning(false);
+    	setRunning(false);
     }
 
 }

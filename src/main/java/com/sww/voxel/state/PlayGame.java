@@ -21,7 +21,6 @@ import static org.lwjgl.opengl.GL11.*;
 
 import org.lwjgl.opengl.GLContext;
 
-import com.sww.voxel.Main;
 import com.sww.voxel.engine.Game;
 import com.sww.voxel.engine.Time;
 
@@ -44,8 +43,8 @@ public class PlayGame extends GameState {
         long lastTime = Time.getTime();
         double unprocessedTime = 0;
 
-        Main.setRunning(true);
-        while(Main.isRunning()) {
+        setRunning(true);
+        while(isRunning()) {
         	boolean render = false;
 
         	final double frameTime = 1.0 / FRAMECAP;
@@ -76,7 +75,7 @@ public class PlayGame extends GameState {
         		game.render();
 
 	            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	            glfwSwapBuffers(Main.getWindow());
+	            glfwSwapBuffers(getWindow());
 	            glfwPollEvents();
 	            frames++;
         	} else {
@@ -91,14 +90,10 @@ public class PlayGame extends GameState {
     }
 
     private void stop() {
-    	if(!Main.isRunning()) {
+    	if(!isRunning()) {
     		return;
     	}
-    	Main.setRunning(false);
-    }
-   
-    public boolean isCloseRequested() {
-    	return (glfwWindowShouldClose(Main.getWindow()) == GL_TRUE);
+    	setRunning(false);
     }
 
 }

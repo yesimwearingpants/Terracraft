@@ -37,7 +37,7 @@ public class Main {
     private KeyInput keyCallback;
     private MouseInput mouseCallback;	
     
-	private int vSync = 0;
+	private static int vSync = 0;
 
     private static boolean isRunning = false;
     private static long window;
@@ -110,12 +110,12 @@ public class Main {
 		isRunning = running;
 	}
 
-	public int getvSync() {
+	public static int getvSync() {
 		return vSync;
 	}
 
-	public void setvSync(int vSync) {
-		this.vSync = vSync;
+	public static void setvSync(int vSync) {
+		Main.vSync = vSync;
 	}
  
 }
