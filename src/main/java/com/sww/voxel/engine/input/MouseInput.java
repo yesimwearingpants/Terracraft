@@ -20,11 +20,11 @@ import static org.lwjgl.glfw.GLFW.*;
 
 import java.nio.DoubleBuffer;
 
+import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
 import com.sww.voxel.Main;
-import com.sww.voxel.engine.Vector2f;
 
 public class MouseInput extends GLFWMouseButtonCallback {
 
@@ -61,8 +61,8 @@ public class MouseInput extends GLFWMouseButtonCallback {
 	}
 
 	public static void setMousePosition(Vector2f centerPosition) {
-		double x = centerPosition.getX();
-		double y = centerPosition.getY();
+		double x = centerPosition.x;
+		double y = centerPosition.y;
 		glfwSetCursorPos(Main.getWindow(), x, y);
 	}
 

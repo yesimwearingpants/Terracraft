@@ -12,25 +12,37 @@
  * accompanied this code).
  * 
  * @author yesimwearingpants
- * Created Jun 19, 2015
+ * Created Jul 8, 2015
  */
-package com.sww.voxel.engine;
+package com.sww.voxel.engine.utils.vector;
 
-public class Time {
+import org.joml.Vector2d;
+import org.joml.Vector3d;
 
-	private static double delta;
-	public static long SECOND = 1000000000L;
-	
-	public static long getTime() {
-		return System.nanoTime();
+public class Vector3dExt extends Vector3d {
+
+	public Vector3dExt(Vector2d vec2, double z) {
+		super.x = vec2.x;
+		super.y = vec2.y;
+		super.z = z;
 	}
 
-	public static double getDelta() {
-		return delta;
+	public Vector3dExt(double x, double y, double z) {
+		super.x = x;
+		super.y = y;
+		super.z = z;
 	}
 
-	public static void setDelta(double delta) {
-		Time.delta = delta;
+	public double getX() {
+		return super.x;
+	}
+
+	public double getY() {
+		return super.y;
+	}
+
+	public double getZ() {
+		return super.z;
 	}
 
 }

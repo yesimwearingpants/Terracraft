@@ -25,10 +25,11 @@ import java.nio.ByteBuffer;
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWvidmode;
+import org.lwjgl.opengl.GL;
 
+import com.sww.voxel.engine.Game;
 import com.sww.voxel.engine.input.KeyInput;
 import com.sww.voxel.engine.input.MouseInput;
-import com.sww.voxel.state.PlayGame;
 
 public class Main {
 
@@ -38,15 +39,18 @@ public class Main {
     private MouseInput mouseCallback;	
     
 	private static int vSync = 0;
+	private final double FRAMECAP = 5000.0;
+    private final float red = 0.0307f;
+    private final float green = 0.0154f;
+    private final float blue = 0.0794f;
 
-    private static boolean isRunning = false;
+    private static boolean isGameRunning = false;
     private static long window;
 
     public void run() {
         try {
             init();
-            PlayGame play = new PlayGame();
-            play.loop();
+            loop();
             //TODO: pass loop() as arg or something;
 
             glfwDestroyWindow(window);
@@ -87,12 +91,86 @@ public class Main {
         glfwShowWindow(window);
     }
 
-    public void start() {
-    	if(isRunning) {
+    public void loop() {
+    	GL.createCapabilities(true);
+    	Game game = new Game();
+
+        glClearColor(red, green, blue, 0.0f);
+
+        int frames = 0;
+        long frameCounter = 0;
+
+        long lastTime = Time.getTime();
+        double unprocessedTime = 0;
+
+        setRunning(true);
+        while(isRunning()) {
+        	boolean render = false;
+
+        	//*		This Code		*//
+
+        	final double frameTime = 1.0 / FRAMECAP;
+
+        	long startTime = Time.getTime();
+        	long passedTime = startTime - lastTime;
+        	lastTime = startTime;
+
+        	unprocessedTime += passedTime / (double) Time.SECOND;
+        	frameCounter += passedTime;
+
+        	while(unprocessedTime > frameTime) {
+        		unprocessedTime -= frameTime;
+	        	if(isCloseRequested()) {
+	        		stop();
+	        	}
+	        	Time.setDelta(frameTime);
+
+	        	game.input();
+	        	game.update();
+	        	if(frameCounter >= Time.SECOND) {
+	        		System.out.println(frames);
+	        		frames = 0;
+	        		frameCounter = 0;
+	        	}
+        	}
+
+        	//*			I think			*//
+
+        	if(render && !isCloseRequested()) {
+        		game.run();
+
+	            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	            glfwSwapBuffers(getWindow());
+	            glfwPollEvents();
+	            frames++;
+        	} else {
+        		try {
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+					System.err.println("Can't Sleep Too Much Java");
+					e.printStackTrace();
+				}
+        	}
+        }
+    }
+
+	public void start() {
+    	if(isRunning()) {
     		throw new IllegalStateException("Already Running");
     	}
     	run();
     }
+
+    private void stop() {
+    	if(!isRunning()) {
+    		return;
+    	}
+    	setRunning(false);
+    }
+
+	private boolean isCloseRequested() {
+		return (glfwWindowShouldClose(getWindow()) == GL_TRUE);
+	}
 
     public static void main(String[] args) {
         new Main().run();
@@ -103,11 +181,11 @@ public class Main {
     }
 
 	public static boolean isRunning() {
-		return isRunning;
+		return isGameRunning;
 	}
 
 	public static void setRunning(boolean running) {
-		isRunning = running;
+		isGameRunning = running;
 	}
 
 	public static int getvSync() {
